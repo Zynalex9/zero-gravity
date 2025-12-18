@@ -8,12 +8,12 @@ import * as THREE from 'three';
 // PERFORMANCE CONFIGURATION - TWEAK HERE
 // ============================================
 export const STARFIELD_CONFIG = {
-  // Base star count (desktop) - increased for rich dense field
-  baseStarCount: 8000,
+  // Base star count (desktop) - high density for rich field
+  baseStarCount: 12000,
   // Mobile star count (reduced for performance)
-  mobileStarCount: 4000,
+  mobileStarCount: 6000,
   // Minimum visible stars (at scroll = 0)
-  minVisibleRatio: 0.4,
+  minVisibleRatio: 0.5,
   // Maximum visible stars (at scroll = 1)
   maxVisibleRatio: 1.0,
   // Star field radius - keep distant
