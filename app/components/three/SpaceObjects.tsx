@@ -168,13 +168,17 @@ function MarsPlanet({
   scrollProgress: number;
   reducedMotion: boolean;
 }) {
+  const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
   const atmosphereRef = useRef<THREE.Mesh>(null);
+  const smoothX = useRef(-78); // Start offscreen
+  const smoothOpacity = useRef(0);
+  
   const { visible, opacity, xOffset } = useVisibility(
     scrollProgress,
     SPACE_OBJECTS_CONFIG.sections.services.start,
     SPACE_OBJECTS_CONFIG.sections.services.end,
-    'left' // Comes from left
+    'left'
   );
 
   const texture = useMemo(() => {
@@ -187,16 +191,30 @@ function MarsPlanet({
     return createPlanetTexture('#666666', '#444444', 6);
   }, []);
 
+  const targetX = -18 + xOffset;
+  const targetOpacity = opacity;
+
   useFrame((state, delta) => {
-    if (!meshRef.current || reducedMotion) return;
-    meshRef.current.rotation.y += delta * 0.03;
+    // Very smooth lerp - lower value = smoother
+    const smoothFactor = 0.08;
+    smoothX.current = lerp(smoothX.current, targetX, smoothFactor);
+    smoothOpacity.current = lerp(smoothOpacity.current, targetOpacity, smoothFactor);
+    
+    if (groupRef.current) {
+      groupRef.current.position.x = smoothX.current;
+    }
+    
+    if (meshRef.current) {
+      (meshRef.current.material as THREE.MeshStandardMaterial).opacity = smoothOpacity.current * 0.95;
+      if (!reducedMotion) meshRef.current.rotation.y += delta * 0.03;
+    }
+    if (atmosphereRef.current) {
+      (atmosphereRef.current.material as THREE.MeshBasicMaterial).opacity = smoothOpacity.current * 0.15;
+    }
   });
 
-  // Final position with animation offset
-  const finalX = -18 + xOffset;
-
   return (
-    <group position={[finalX, 0, -35]} visible={visible}>
+    <group ref={groupRef} position={[-78, 0, -35]} visible={visible || smoothOpacity.current > 0.01}>
       {/* Main planet */}
       <mesh ref={meshRef}>
         <sphereGeometry args={[12, 64, 64]} />
@@ -207,7 +225,7 @@ function MarsPlanet({
           roughness={0.9}
           metalness={0.1}
           transparent
-          opacity={opacity * 0.95}
+          opacity={0}
         />
       </mesh>
       {/* Atmosphere glow */}
@@ -216,7 +234,7 @@ function MarsPlanet({
         <meshBasicMaterial
           color="#ff6644"
           transparent
-          opacity={opacity * 0.15}
+          opacity={0}
           side={THREE.BackSide}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
@@ -237,11 +255,17 @@ function SaturnPlanet({
   reducedMotion: boolean;
 }) {
   const groupRef = useRef<THREE.Group>(null);
+  const planetRef = useRef<THREE.Mesh>(null);
+  const ringRef = useRef<THREE.Mesh>(null);
+  const atmosphereRef = useRef<THREE.Mesh>(null);
+  const smoothX = useRef(82); // Start offscreen right
+  const smoothOpacity = useRef(0);
+  
   const { visible, opacity, xOffset } = useVisibility(
     scrollProgress,
     SPACE_OBJECTS_CONFIG.sections.work.start,
     SPACE_OBJECTS_CONFIG.sections.work.end,
-    'right' // Comes from right
+    'right'
   );
 
   const texture = useMemo(() => {
@@ -257,18 +281,13 @@ function SaturnPlanet({
     canvas.height = 64;
     const ctx = canvas.getContext('2d')!;
 
-    // Create ring bands
     for (let x = 0; x < 512; x++) {
       const noise = Math.sin(x * 0.1) * 0.3 + Math.sin(x * 0.05) * 0.2 + Math.random() * 0.1;
       const alpha = Math.max(0, Math.min(1, 0.5 + noise));
-
-      // Create gaps in rings
       const gap1 = x > 150 && x < 170;
       const gap2 = x > 280 && x < 295;
       const gap3 = x > 380 && x < 390;
-
       if (gap1 || gap2 || gap3) continue;
-
       ctx.fillStyle = `rgba(210, 190, 165, ${alpha})`;
       ctx.fillRect(x, 0, 1, 64);
     }
@@ -278,50 +297,41 @@ function SaturnPlanet({
     return tex;
   }, []);
 
+  const targetX = 22 + xOffset;
+
   useFrame((state, delta) => {
-    if (!groupRef.current || reducedMotion) return;
-    groupRef.current.rotation.y += delta * 0.02;
+    const smoothFactor = 0.08;
+    smoothX.current = lerp(smoothX.current, targetX, smoothFactor);
+    smoothOpacity.current = lerp(smoothOpacity.current, opacity, smoothFactor);
+    
+    if (groupRef.current) {
+      groupRef.current.position.x = smoothX.current;
+      if (!reducedMotion) groupRef.current.rotation.y += delta * 0.02;
+    }
+    if (planetRef.current) {
+      (planetRef.current.material as THREE.MeshStandardMaterial).opacity = smoothOpacity.current * 0.95;
+    }
+    if (ringRef.current) {
+      (ringRef.current.material as THREE.MeshStandardMaterial).opacity = smoothOpacity.current * 0.7;
+    }
+    if (atmosphereRef.current) {
+      (atmosphereRef.current.material as THREE.MeshBasicMaterial).opacity = smoothOpacity.current * 0.1;
+    }
   });
 
-  // Final position with animation offset
-  const finalX = 22 + xOffset;
-
   return (
-    <group ref={groupRef} position={[finalX, -5, -40]} rotation={[0.3, 0, 0.1]} visible={visible}>
-      {/* Planet body */}
-      <mesh>
+    <group ref={groupRef} position={[82, -5, -40]} rotation={[0.3, 0, 0.1]} visible={visible || smoothOpacity.current > 0.01}>
+      <mesh ref={planetRef}>
         <sphereGeometry args={[10, 64, 64]} />
-        <meshStandardMaterial
-          map={texture}
-          roughness={0.8}
-          metalness={0.1}
-          transparent
-          opacity={opacity * 0.95}
-        />
+        <meshStandardMaterial map={texture} roughness={0.8} metalness={0.1} transparent opacity={0} />
       </mesh>
-      {/* Ring system */}
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
+      <mesh ref={ringRef} rotation={[Math.PI / 2, 0, 0]}>
         <ringGeometry args={[14, 24, 128]} />
-        <meshStandardMaterial
-          map={ringTexture}
-          side={THREE.DoubleSide}
-          transparent
-          opacity={opacity * 0.7}
-          roughness={0.9}
-          depthWrite={false}
-        />
+        <meshStandardMaterial map={ringTexture} side={THREE.DoubleSide} transparent opacity={0} roughness={0.9} depthWrite={false} />
       </mesh>
-      {/* Atmosphere */}
-      <mesh scale={1.05}>
+      <mesh ref={atmosphereRef} scale={1.05}>
         <sphereGeometry args={[10, 32, 32]} />
-        <meshBasicMaterial
-          color="#e8d4b8"
-          transparent
-          opacity={opacity * 0.1}
-          side={THREE.BackSide}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
+        <meshBasicMaterial color="#e8d4b8" transparent opacity={0} side={THREE.BackSide} blending={THREE.AdditiveBlending} depthWrite={false} />
       </mesh>
     </group>
   );
@@ -337,13 +347,18 @@ function EarthPlanet({
   scrollProgress: number;
   reducedMotion: boolean;
 }) {
+  const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
   const cloudsRef = useRef<THREE.Mesh>(null);
+  const atmosphereRef = useRef<THREE.Mesh>(null);
+  const smoothX = useRef(-80); // Start offscreen left
+  const smoothOpacity = useRef(0);
+  
   const { visible, opacity, xOffset } = useVisibility(
     scrollProgress,
     SPACE_OBJECTS_CONFIG.sections.about.start,
     SPACE_OBJECTS_CONFIG.sections.about.end,
-    'left' // Comes from left
+    'left'
   );
 
   const texture = useMemo(() => {
@@ -354,35 +369,28 @@ function EarthPlanet({
     canvas.height = size;
     const ctx = canvas.getContext('2d')!;
 
-    // Ocean base
     ctx.fillStyle = '#1a4a7a';
     ctx.fillRect(0, 0, size, size);
 
-    // Add land masses
     const imageData = ctx.getImageData(0, 0, size, size);
     const data = imageData.data;
 
     for (let i = 0; i < data.length; i += 4) {
       const x = (i / 4) % size;
       const y = Math.floor(i / 4 / size);
-
-      // Create continent-like shapes
       const n1 = Math.sin(x * 0.015) * Math.cos(y * 0.02) * Math.sin(x * 0.008 + y * 0.01);
       const n2 = Math.sin(x * 0.025 + 2) * Math.cos(y * 0.018 + 1);
       const land = n1 + n2 * 0.6;
 
       if (land > 0.3) {
-        // Green land
         data[i] = 34 + Math.random() * 30;
         data[i + 1] = 85 + Math.random() * 40;
         data[i + 2] = 34 + Math.random() * 20;
       } else if (land > 0.2) {
-        // Beach/desert
         data[i] = 180 + Math.random() * 30;
         data[i + 1] = 160 + Math.random() * 30;
         data[i + 2] = 100 + Math.random() * 30;
       } else {
-        // Ocean with depth variation
         const depth = Math.random() * 20;
         data[i] = 26 - depth * 0.3;
         data[i + 1] = 74 + depth;
@@ -394,7 +402,6 @@ function EarthPlanet({
     return new THREE.CanvasTexture(canvas);
   }, []);
 
-  // Cloud texture
   const cloudTexture = useMemo(() => {
     if (typeof document === 'undefined') return null;
     const canvas = document.createElement('canvas');
@@ -412,7 +419,6 @@ function EarthPlanet({
     for (let i = 0; i < data.length; i += 4) {
       const x = (i / 4) % size;
       const y = Math.floor(i / 4 / size);
-
       const n1 = Math.sin(x * 0.03) * Math.cos(y * 0.025);
       const n2 = Math.sin(x * 0.02 + 1) * Math.cos(y * 0.04 + 2);
       const cloud = (n1 + n2) * 0.5 + 0.5;
@@ -430,53 +436,42 @@ function EarthPlanet({
     return new THREE.CanvasTexture(canvas);
   }, []);
 
+  const targetX = -20 + xOffset;
+
   useFrame((state, delta) => {
-    if (reducedMotion) return;
+    const smoothFactor = 0.08;
+    smoothX.current = lerp(smoothX.current, targetX, smoothFactor);
+    smoothOpacity.current = lerp(smoothOpacity.current, opacity, smoothFactor);
+    
+    if (groupRef.current) {
+      groupRef.current.position.x = smoothX.current;
+    }
     if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.025;
+      (meshRef.current.material as THREE.MeshStandardMaterial).opacity = smoothOpacity.current * 0.95;
+      if (!reducedMotion) meshRef.current.rotation.y += delta * 0.025;
     }
     if (cloudsRef.current) {
-      cloudsRef.current.rotation.y += delta * 0.035;
+      (cloudsRef.current.material as THREE.MeshStandardMaterial).opacity = smoothOpacity.current * 0.6;
+      if (!reducedMotion) cloudsRef.current.rotation.y += delta * 0.035;
+    }
+    if (atmosphereRef.current) {
+      (atmosphereRef.current.material as THREE.MeshBasicMaterial).opacity = smoothOpacity.current * 0.2;
     }
   });
 
-  // Final position with animation offset
-  const finalX = -20 + xOffset;
-
   return (
-    <group position={[finalX, 3, -38]} visible={visible}>
-      {/* Planet */}
+    <group ref={groupRef} position={[-80, 3, -38]} visible={visible || smoothOpacity.current > 0.01}>
       <mesh ref={meshRef}>
         <sphereGeometry args={[11, 64, 64]} />
-        <meshStandardMaterial
-          map={texture}
-          roughness={0.7}
-          metalness={0.1}
-          transparent
-          opacity={opacity * 0.95}
-        />
+        <meshStandardMaterial map={texture} roughness={0.7} metalness={0.1} transparent opacity={0} />
       </mesh>
-      {/* Clouds */}
       <mesh ref={cloudsRef} scale={1.02}>
         <sphereGeometry args={[11, 64, 64]} />
-        <meshStandardMaterial
-          map={cloudTexture}
-          transparent
-          opacity={opacity * 0.6}
-          depthWrite={false}
-        />
+        <meshStandardMaterial map={cloudTexture} transparent opacity={0} depthWrite={false} />
       </mesh>
-      {/* Atmosphere */}
-      <mesh scale={1.1}>
+      <mesh ref={atmosphereRef} scale={1.1}>
         <sphereGeometry args={[11, 32, 32]} />
-        <meshBasicMaterial
-          color="#4488ff"
-          transparent
-          opacity={opacity * 0.2}
-          side={THREE.BackSide}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
+        <meshBasicMaterial color="#4488ff" transparent opacity={0} side={THREE.BackSide} blending={THREE.AdditiveBlending} depthWrite={false} />
       </mesh>
     </group>
   );
@@ -492,12 +487,17 @@ function IceGiant({
   scrollProgress: number;
   reducedMotion: boolean;
 }) {
+  const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
+  const atmosphereRef = useRef<THREE.Mesh>(null);
+  const smoothX = useRef(78); // Start offscreen right
+  const smoothOpacity = useRef(0);
+  
   const { visible, opacity, xOffset } = useVisibility(
     scrollProgress,
     SPACE_OBJECTS_CONFIG.sections.contact.start,
     SPACE_OBJECTS_CONFIG.sections.contact.end,
-    'right' // Comes from right
+    'right'
   );
 
   const texture = useMemo(() => {
@@ -508,7 +508,6 @@ function IceGiant({
     canvas.height = size;
     const ctx = canvas.getContext('2d')!;
 
-    // Create banded atmosphere
     for (let y = 0; y < size; y++) {
       const band = Math.sin(y * 0.05) * 0.15 + Math.sin(y * 0.02) * 0.1;
       const r = Math.floor(50 + band * 30);
@@ -518,7 +517,6 @@ function IceGiant({
       ctx.fillRect(0, y, size, 1);
     }
 
-    // Add storm spots
     ctx.fillStyle = 'rgba(30, 80, 140, 0.6)';
     ctx.beginPath();
     ctx.ellipse(200, 200, 40, 20, 0, 0, Math.PI * 2);
@@ -527,37 +525,34 @@ function IceGiant({
     return new THREE.CanvasTexture(canvas);
   }, []);
 
+  const targetX = 18 + xOffset;
+
   useFrame((state, delta) => {
-    if (!meshRef.current || reducedMotion) return;
-    meshRef.current.rotation.y += delta * 0.04;
+    const smoothFactor = 0.08;
+    smoothX.current = lerp(smoothX.current, targetX, smoothFactor);
+    smoothOpacity.current = lerp(smoothOpacity.current, opacity, smoothFactor);
+    
+    if (groupRef.current) {
+      groupRef.current.position.x = smoothX.current;
+    }
+    if (meshRef.current) {
+      (meshRef.current.material as THREE.MeshStandardMaterial).opacity = smoothOpacity.current * 0.95;
+      if (!reducedMotion) meshRef.current.rotation.y += delta * 0.04;
+    }
+    if (atmosphereRef.current) {
+      (atmosphereRef.current.material as THREE.MeshBasicMaterial).opacity = smoothOpacity.current * 0.18;
+    }
   });
 
-  // Final position with animation offset
-  const finalX = 18 + xOffset;
-
   return (
-    <group position={[finalX, -2, -35]} visible={visible}>
+    <group ref={groupRef} position={[78, -2, -35]} visible={visible || smoothOpacity.current > 0.01}>
       <mesh ref={meshRef}>
         <sphereGeometry args={[13, 64, 64]} />
-        <meshStandardMaterial
-          map={texture}
-          roughness={0.6}
-          metalness={0.2}
-          transparent
-          opacity={opacity * 0.95}
-        />
+        <meshStandardMaterial map={texture} roughness={0.6} metalness={0.2} transparent opacity={0} />
       </mesh>
-      {/* Atmospheric glow */}
-      <mesh scale={1.08}>
+      <mesh ref={atmosphereRef} scale={1.08}>
         <sphereGeometry args={[13, 32, 32]} />
-        <meshBasicMaterial
-          color="#4488cc"
-          transparent
-          opacity={opacity * 0.18}
-          side={THREE.BackSide}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
+        <meshBasicMaterial color="#4488cc" transparent opacity={0} side={THREE.BackSide} blending={THREE.AdditiveBlending} depthWrite={false} />
       </mesh>
     </group>
   );

@@ -8,12 +8,12 @@ import * as THREE from 'three';
 // PERFORMANCE CONFIGURATION - TWEAK HERE
 // ============================================
 export const STARFIELD_CONFIG = {
-  // Base star count (desktop) - increased for rich field
-  baseStarCount: 5000,
+  // Base star count (desktop) - increased for rich dense field
+  baseStarCount: 8000,
   // Mobile star count (reduced for performance)
-  mobileStarCount: 2500,
+  mobileStarCount: 4000,
   // Minimum visible stars (at scroll = 0)
-  minVisibleRatio: 0.3,
+  minVisibleRatio: 0.4,
   // Maximum visible stars (at scroll = 1)
   maxVisibleRatio: 1.0,
   // Star field radius - keep distant
@@ -293,6 +293,80 @@ function MidStars({ scrollProgress, starCount, reducedMotion }: {
   );
 }
 
+// Dense star band - subtle Milky Way hint in the center
+function DenseStarBand({ starCount, reducedMotion }: { starCount: number; reducedMotion: boolean }) {
+  const pointsRef = useRef<THREE.Points>(null);
+
+  const starTexture = useMemo(() => {
+    if (typeof document === 'undefined') return null;
+    return createDimStarTexture();
+  }, []);
+
+  const { positions, colors } = useMemo(() => {
+    const count = Math.floor(starCount * 0.6); // Dense cluster
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+    
+    // Mostly cool blues and whites for galaxy band
+    const bandColors = [
+      ...STARFIELD_CONFIG.colors.blues.map(c => new THREE.Color(c)),
+      ...STARFIELD_CONFIG.colors.whites.map(c => new THREE.Color(c)),
+      ...STARFIELD_CONFIG.colors.whites.map(c => new THREE.Color(c)),
+    ];
+
+    for (let i = 0; i < count; i++) {
+      // Create a horizontal band concentrated around y=0
+      const radius = 80 + Math.random() * 100;
+      const theta = Math.random() * Math.PI * 2;
+      
+      // Concentrate stars near the horizontal plane (y close to 0)
+      const verticalSpread = (Math.random() + Math.random() + Math.random()) / 3 - 0.5;
+      const y = verticalSpread * 40;
+      
+      const horizontalRadius = Math.sqrt(radius * radius - y * y * 0.3);
+      
+      positions[i * 3] = horizontalRadius * Math.cos(theta);
+      positions[i * 3 + 1] = y;
+      positions[i * 3 + 2] = horizontalRadius * Math.sin(theta);
+
+      const color = bandColors[Math.floor(Math.random() * bandColors.length)].clone();
+      color.multiplyScalar(0.5 + Math.random() * 0.3);
+      colors[i * 3] = color.r;
+      colors[i * 3 + 1] = color.g;
+      colors[i * 3 + 2] = color.b;
+    }
+
+    return { positions, colors };
+  }, [starCount]);
+
+  useFrame((state, delta) => {
+    if (!pointsRef.current || reducedMotion) return;
+    pointsRef.current.rotation.y += delta * 0.005;
+  });
+
+  const geometry = useMemo(() => {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    return geo;
+  }, [positions, colors]);
+
+  return (
+    <points ref={pointsRef} geometry={geometry}>
+      <pointsMaterial
+        size={0.35}
+        sizeAttenuation={true}
+        vertexColors={true}
+        transparent={true}
+        opacity={0.4}
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+        map={starTexture}
+      />
+    </points>
+  );
+}
+
 // Bright accent stars - fewer, more colorful, subtle glow
 function BrightStars({ starCount, reducedMotion }: { starCount: number; reducedMotion: boolean }) {
   const pointsRef = useRef<THREE.Points>(null);
@@ -364,22 +438,164 @@ function BrightStars({ starCount, reducedMotion }: { starCount: number; reducedM
   );
 }
 
+// Create nebula texture for cosmic dust clouds
+function createNebulaTexture(
+  color1: string,
+  color2: string,
+  color3: string
+): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  const size = 512;
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d')!;
+
+  // Create soft cloudy nebula effect
+  ctx.fillStyle = 'rgba(0,0,0,0)';
+  ctx.fillRect(0, 0, size, size);
+
+  // Layer multiple gradients for organic cloud look
+  const centerX = size / 2;
+  const centerY = size / 2;
+
+  // Main nebula glow
+  const gradient1 = ctx.createRadialGradient(
+    centerX * 0.3, centerY * 0.5, 0,
+    centerX * 0.3, centerY * 0.5, size * 0.8
+  );
+  gradient1.addColorStop(0, color1 + '40');
+  gradient1.addColorStop(0.3, color1 + '25');
+  gradient1.addColorStop(0.6, color2 + '15');
+  gradient1.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = gradient1;
+  ctx.fillRect(0, 0, size, size);
+
+  // Secondary cloud
+  const gradient2 = ctx.createRadialGradient(
+    centerX * 1.5, centerY * 0.8, 0,
+    centerX * 1.5, centerY * 0.8, size * 0.6
+  );
+  gradient2.addColorStop(0, color2 + '35');
+  gradient2.addColorStop(0.4, color3 + '20');
+  gradient2.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = gradient2;
+  ctx.fillRect(0, 0, size, size);
+
+  // Add noise for texture
+  const imageData = ctx.getImageData(0, 0, size, size);
+  const data = imageData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const noise = (Math.random() - 0.5) * 20;
+    data[i] = Math.max(0, Math.min(255, data[i] + noise));
+    data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + noise));
+    data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + noise));
+  }
+  ctx.putImageData(imageData, 0, 0);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
+// Nebula clouds - warm cosmic dust effect
+function NebulaClouds({ reducedMotion }: { reducedMotion: boolean }) {
+  const groupRef = useRef<THREE.Group>(null);
+
+  // Create nebula textures
+  const warmNebulaTexture = useMemo(() => {
+    if (typeof document === 'undefined') return null;
+    return createNebulaTexture('#ff6b35', '#ff8c42', '#ffa559');
+  }, []);
+
+  const coolNebulaTexture = useMemo(() => {
+    if (typeof document === 'undefined') return null;
+    return createNebulaTexture('#1a5fb4', '#3584e4', '#62a0ea');
+  }, []);
+
+  useFrame((state, delta) => {
+    if (!groupRef.current || reducedMotion) return;
+    groupRef.current.rotation.z += delta * 0.002;
+  });
+
+  return (
+    <group ref={groupRef}>
+      {/* Left side warm nebula */}
+      <mesh position={[-70, 10, -100]} rotation={[0, 0, 0.3]}>
+        <planeGeometry args={[120, 100]} />
+        <meshBasicMaterial
+          map={warmNebulaTexture}
+          transparent
+          opacity={0.35}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Right side warm nebula */}
+      <mesh position={[75, -15, -110]} rotation={[0, 0, -0.2]}>
+        <planeGeometry args={[100, 90]} />
+        <meshBasicMaterial
+          map={warmNebulaTexture}
+          transparent
+          opacity={0.3}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Top right cool nebula hint */}
+      <mesh position={[50, 45, -120]} rotation={[0, 0, 0.5]}>
+        <planeGeometry args={[80, 70]} />
+        <meshBasicMaterial
+          map={coolNebulaTexture}
+          transparent
+          opacity={0.2}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Bottom warm glow */}
+      <mesh position={[-20, -50, -90]} rotation={[0, 0, 0.1]}>
+        <planeGeometry args={[140, 60]} />
+        <meshBasicMaterial
+          map={warmNebulaTexture}
+          transparent
+          opacity={0.25}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+    </group>
+  );
+}
+
 export function Starfield({ scrollProgress, reducedMotion, isMobile }: StarfieldProps) {
   const starCount = isMobile ? STARFIELD_CONFIG.mobileStarCount : STARFIELD_CONFIG.baseStarCount;
 
   return (
     <group>
+      {/* Layer 0: Nebula clouds - cosmic dust background */}
+      <NebulaClouds reducedMotion={reducedMotion} />
+      
       {/* Layer 1: Far distant tiny stars - creates depth */}
       <DistantStars starCount={starCount} reducedMotion={reducedMotion} />
       
-      {/* Layer 2: Main mid-distance star field */}
+      {/* Layer 2: Dense star band - Milky Way hint */}
+      <DenseStarBand starCount={starCount} reducedMotion={reducedMotion} />
+      
+      {/* Layer 3: Main mid-distance star field */}
       <MidStars 
         scrollProgress={scrollProgress} 
         starCount={starCount} 
         reducedMotion={reducedMotion} 
       />
       
-      {/* Layer 3: Bright accent stars with glow */}
+      {/* Layer 4: Bright accent stars with glow */}
       <BrightStars starCount={starCount} reducedMotion={reducedMotion} />
     </group>
   );

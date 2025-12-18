@@ -24,7 +24,13 @@ export function SpaceScene({
     <div 
       className="fixed inset-0 w-full h-full"
       style={{ 
-        background: 'radial-gradient(ellipse at 30% 20%, #0d1a2d 0%, #080c14 35%, #050508 70%, #020203 100%)',
+        background: `
+          radial-gradient(ellipse at 0% 0%, rgba(180, 100, 50, 0.15) 0%, transparent 50%),
+          radial-gradient(ellipse at 100% 20%, rgba(160, 80, 40, 0.12) 0%, transparent 45%),
+          radial-gradient(ellipse at 80% 100%, rgba(140, 70, 35, 0.1) 0%, transparent 40%),
+          radial-gradient(ellipse at 20% 80%, rgba(50, 80, 120, 0.08) 0%, transparent 35%),
+          radial-gradient(ellipse at 50% 50%, #0a1220 0%, #060a12 40%, #030508 70%, #020304 100%)
+        `,
         zIndex: 0 
       }}
       aria-hidden="true"
