@@ -1,13 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { Section, ContentBox, GradientText } from '../ui';
+import { Section } from '../ui';
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    company: '',
     message: '',
   });
 
@@ -20,35 +19,43 @@ export function ContactSection() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
     console.log('Form submitted:', formData);
-    alert('Thanks for reaching out! We\'ll get back to you soon.');
-    setFormData({ name: '', email: '', company: '', message: '' });
+    alert('Thanks for reaching out! I\'ll get back to you soon.');
+    setFormData({ name: '', email: '', message: '' });
   };
+
+  const socialLinks = [
+    { name: 'Behance', url: 'https://behance.net/zerogravity', icon: '🅱️' },
+    { name: 'Dribbble', url: 'https://dribbble.com/zerogravity', icon: '🏀' },
+    { name: 'Instagram', url: 'https://instagram.com/zerogravity', icon: '📸' },
+    { name: 'LinkedIn', url: 'https://linkedin.com/company/zerogravity', icon: '💼' },
+  ];
 
   return (
     <Section id="contact" className="py-20 md:py-32">
-      <div className="container mx-auto px-4 md:px-8 max-w-6xl">
+      <div className="container mx-auto px-4 md:px-8 max-w-5xl">
         {/* Section Header */}
-        <div className="text-center mb-16 md:mb-24">
-          <p className="text-purple-400 text-sm md:text-base tracking-widest uppercase mb-4">
-            Get In Touch
-          </p>
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-            Let's Create <GradientText>Together</GradientText>
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <div className="w-12 h-[1px] bg-[#f5f0e8]/30"></div>
+            <span className="decorative-star text-[#f5f0e8]">✦</span>
+            <div className="w-12 h-[1px] bg-[#f5f0e8]/30"></div>
+          </div>
+          <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-metallic mb-4">
+            LET'S TALK
           </h2>
-          <p className="text-white/60 text-lg max-w-2xl mx-auto">
-            Ready to launch your next project into orbit? We'd love to hear from you.
+          <p className="text-[#f5f0e8]/60 text-lg max-w-xl mx-auto">
+            Have a project in mind? Let's create something amazing together.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <ContentBox blur={true}>
+          <div className="portfolio-card">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="name" className="block text-white/70 text-sm mb-2">
-                  Your Name *
+                <label htmlFor="name" className="block text-[#f5f0e8]/70 text-sm mb-2">
+                  Your Name
                 </label>
                 <input
                   type="text"
@@ -57,14 +64,14 @@ export function ContactSection() {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-purple-500 transition-colors"
+                  className="w-full px-4 py-3 bg-white/5 border border-[#f5f0e8]/10 rounded-lg text-[#f5f0e8] placeholder-[#f5f0e8]/30 focus:outline-none focus:border-[#f5f0e8]/30 transition-colors"
                   placeholder="John Doe"
                 />
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-white/70 text-sm mb-2">
-                  Email Address *
+                <label htmlFor="email" className="block text-[#f5f0e8]/70 text-sm mb-2">
+                  Email Address
                 </label>
                 <input
                   type="email"
@@ -73,29 +80,14 @@ export function ContactSection() {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-purple-500 transition-colors"
+                  className="w-full px-4 py-3 bg-white/5 border border-[#f5f0e8]/10 rounded-lg text-[#f5f0e8] placeholder-[#f5f0e8]/30 focus:outline-none focus:border-[#f5f0e8]/30 transition-colors"
                   placeholder="john@example.com"
                 />
               </div>
 
               <div>
-                <label htmlFor="company" className="block text-white/70 text-sm mb-2">
-                  Company
-                </label>
-                <input
-                  type="text"
-                  id="company"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-purple-500 transition-colors"
-                  placeholder="Your Company"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-white/70 text-sm mb-2">
-                  Message *
+                <label htmlFor="message" className="block text-[#f5f0e8]/70 text-sm mb-2">
+                  Your Message
                 </label>
                 <textarea
                   id="message"
@@ -104,81 +96,83 @@ export function ContactSection() {
                   onChange={handleChange}
                   required
                   rows={5}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-purple-500 transition-colors resize-none"
-                  placeholder="Tell us about your project..."
+                  className="w-full px-4 py-3 bg-white/5 border border-[#f5f0e8]/10 rounded-lg text-[#f5f0e8] placeholder-[#f5f0e8]/30 focus:outline-none focus:border-[#f5f0e8]/30 transition-colors resize-none"
+                  placeholder="Tell me about your project..."
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-4 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg text-white font-medium hover:opacity-90 transition-all hover:scale-[1.02] transform"
+                className="w-full py-4 bg-[#f5f0e8] rounded-lg text-[#1a1a1a] font-medium hover:bg-[#e8e0d0] transition-all"
               >
                 Send Message
               </button>
             </form>
-          </ContentBox>
+          </div>
 
           {/* Contact Info */}
-          <div className="space-y-8">
-            <ContentBox blur={true}>
-              <h3 className="text-xl font-bold text-white mb-4">Contact Information</h3>
+          <div className="space-y-6">
+            <div className="portfolio-card">
+              <h3 className="font-serif text-2xl font-bold text-[#f5f0e8] mb-6">Get In Touch</h3>
               <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <span className="text-2xl">📧</span>
+                <div className="flex items-center gap-4">
+                  <span className="text-2xl">✉️</span>
                   <div>
-                    <p className="text-white font-medium">Email</p>
-                    <a href="mailto:hello@zerogravity.design" className="text-white/60 hover:text-purple-400 transition-colors">
+                    <p className="text-[#f5f0e8]/60 text-sm">Email</p>
+                    <a href="mailto:hello@zerogravity.design" className="text-[#f5f0e8] hover:text-[#d4c8b8] transition-colors">
                       hello@zerogravity.design
                     </a>
                   </div>
                 </div>
-                <div className="flex items-start gap-4">
-                  <span className="text-2xl">📱</span>
+                <div className="flex items-center gap-4">
+                  <span className="text-2xl">📞</span>
                   <div>
-                    <p className="text-white font-medium">Phone</p>
-                    <a href="tel:+1234567890" className="text-white/60 hover:text-purple-400 transition-colors">
-                      +1 (234) 567-890
+                    <p className="text-[#f5f0e8]/60 text-sm">Phone</p>
+                    <a href="tel:+1234567890" className="text-[#f5f0e8] hover:text-[#d4c8b8] transition-colors">
+                      (+1) 234-567-890
                     </a>
                   </div>
                 </div>
-                <div className="flex items-start gap-4">
+                <div className="flex items-center gap-4">
                   <span className="text-2xl">📍</span>
                   <div>
-                    <p className="text-white font-medium">Location</p>
-                    <p className="text-white/60">
-                      123 Creative Street<br />
-                      Design District, CA 90210
-                    </p>
+                    <p className="text-[#f5f0e8]/60 text-sm">Location</p>
+                    <p className="text-[#f5f0e8]">San Francisco, CA</p>
                   </div>
                 </div>
               </div>
-            </ContentBox>
+            </div>
 
-            <ContentBox blur={true}>
-              <h3 className="text-xl font-bold text-white mb-4">Follow Us</h3>
-              <div className="flex gap-4">
-                {['Twitter', 'Instagram', 'LinkedIn', 'Dribbble'].map((social) => (
+            <div className="portfolio-card">
+              <h3 className="font-serif text-2xl font-bold text-[#f5f0e8] mb-6">Follow Me</h3>
+              <div className="grid grid-cols-2 gap-3">
+                {socialLinks.map((social) => (
                   <a
-                    key={social}
-                    href={`https://${social.toLowerCase()}.com`}
+                    key={social.name}
+                    href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all text-sm"
+                    className="flex items-center gap-3 px-4 py-3 bg-white/5 border border-[#f5f0e8]/10 rounded-lg hover:bg-white/10 transition-all group"
                   >
-                    {social}
+                    <span className="text-xl">{social.icon}</span>
+                    <span className="text-[#f5f0e8]/70 group-hover:text-[#f5f0e8] transition-colors text-sm">
+                      {social.name}
+                    </span>
                   </a>
                 ))}
               </div>
-            </ContentBox>
+            </div>
 
-            <ContentBox blur={true}>
-              <h3 className="text-xl font-bold text-white mb-4">Office Hours</h3>
-              <div className="text-white/60 space-y-2">
-                <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
-                <p>Saturday: 10:00 AM - 2:00 PM</p>
-                <p>Sunday: Closed</p>
+            {/* Availability Badge */}
+            <div className="portfolio-card text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 border border-green-500/30 rounded-full mb-3">
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span className="text-green-400 text-sm font-medium">Available for Freelance</span>
               </div>
-            </ContentBox>
+              <p className="text-[#f5f0e8]/60 text-sm">
+                Currently accepting new projects and collaborations
+              </p>
+            </div>
           </div>
         </div>
       </div>

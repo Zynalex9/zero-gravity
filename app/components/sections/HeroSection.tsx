@@ -1,15 +1,8 @@
 'use client';
 
-import { Section, GradientText } from '../ui';
+import { Section } from '../ui';
 
 export function HeroSection() {
-  const scrollToContact = () => {
-    const element = document.querySelector('#contact');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   const scrollToWork = () => {
     const element = document.querySelector('#work');
     if (element) {
@@ -19,48 +12,76 @@ export function HeroSection() {
 
   return (
     <Section id="hero" className="pt-20">
-      <div className="container mx-auto px-4 md:px-8 flex flex-col items-start justify-center h-full max-w-6xl">
-        <div className="max-w-3xl">
-          {/* Tagline */}
-          <p className="text-purple-400 text-sm md:text-base tracking-widest uppercase mb-4 md:mb-6">
-            Creative Design Agency
-          </p>
-          
-          {/* Main Headline */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6 md:mb-8">
-            Design Without
-            <br />
-            <GradientText>Boundaries</GradientText>
+      <div className="container mx-auto px-4 md:px-8 flex flex-col items-center justify-center h-full max-w-7xl">
+        {/* Main Portfolio Typography with Glassmorphism */}
+        <div className="relative flex flex-col items-center w-full">
+
+          {/* Year Badge - Top Left */}
+          <div className="absolute left-0 md:left-8 top-8 md:top-16 z-20">
+            <div className="px-6 py-3 rounded-full bg-white/5 backdrop-blur-xl border border-white/10">
+              <span className="text-[#f5f0e8] text-sm font-medium tracking-wide">2025</span>
+            </div>
+          </div>
+
+          {/* Glassmorphism Bars Behind Text */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            {/* Top Bar */}
+            <div
+              className="absolute w-[70%] h-24 md:h-32 rounded-3xl bg-white/[0.02] backdrop-blur-2xl border border-white/5"
+              style={{
+                transform: 'translateY(-40px) rotate(-1deg)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+              }}
+            />
+            {/* Bottom Bar */}
+            <div
+              className="absolute w-[70%] h-24 md:h-32 rounded-3xl bg-white/[0.03] backdrop-blur-2xl border border-white/5"
+              style={{
+                transform: 'translateY(40px) rotate(1deg)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+              }}
+            />
+          </div>
+
+          {/* Large PORTFOLIO Text with Glow */}
+          <h1
+            className="font-serif text-6xl sm:text-7xl md:text-8xl lg:text-[10rem] xl:text-[12rem] font-bold tracking-tight leading-none relative z-10"
+            style={{
+              color: '#f5f0e8',
+              textShadow: `
+                0 0 40px rgba(245, 240, 232, 0.3),
+                0 0 80px rgba(245, 240, 232, 0.2),
+                0 2px 4px rgba(0, 0, 0, 0.5)
+              `,
+              filter: 'drop-shadow(0 0 20px rgba(245, 240, 232, 0.15))'
+            }}
+          >
+            PORTFOLIO
           </h1>
-          
-          {/* Subheadline */}
-          <p className="text-lg md:text-xl text-white/70 mb-8 md:mb-12 max-w-xl leading-relaxed">
-            We craft bold, innovative visual experiences that defy convention 
-            and propel brands into new dimensions of creative excellence.
-          </p>
-          
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={scrollToContact}
-              className="px-8 py-4 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full text-white font-medium hover:opacity-90 transition-all hover:scale-105 transform"
-            >
-              Start Your Project
-            </button>
-            <button
-              onClick={scrollToWork}
-              className="px-8 py-4 border border-white/30 rounded-full text-white font-medium hover:bg-white/10 transition-all hover:border-white/50"
-            >
-              View Our Work
-            </button>
+
+          {/* Name Badge - Bottom Right */}
+          <div className="absolute right-0 md:right-8 bottom-8 md:bottom-16 z-20">
+            <div className="px-6 py-3 rounded-full bg-white/5 backdrop-blur-xl border border-white/10">
+              <span className="text-[#f5f0e8] text-sm md:text-base font-medium tracking-wide font-cursive">
+                Zero Gravity
+              </span>
+            </div>
           </div>
         </div>
 
+        {/* Subtitle */}
+        <p className="mt-12 md:mt-16 text-[#f5f0e8]/60 text-sm md:text-base tracking-[0.3em] uppercase">
+          Graphic Designer • Brand Identity • Visual Art
+        </p>
+
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 animate-bounce">
-          <span className="text-white/50 text-xs tracking-widest">SCROLL</span>
+        <button
+          onClick={scrollToWork}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 animate-bounce cursor-pointer hover:opacity-80 transition-opacity"
+        >
+          <span className="text-[#f5f0e8]/50 text-xs tracking-widest">SCROLL</span>
           <svg
-            className="w-5 h-5 text-white/50"
+            className="w-5 h-5 text-[#f5f0e8]/50"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -72,7 +93,7 @@ export function HeroSection() {
               d="M19 14l-7 7m0 0l-7-7m7 7V3"
             />
           </svg>
-        </div>
+        </button>
       </div>
     </Section>
   );

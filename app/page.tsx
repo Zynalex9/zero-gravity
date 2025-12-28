@@ -4,9 +4,8 @@ import { SpaceBackground } from './components/three';
 import { Navigation } from './components/ui';
 import {
   HeroSection,
-  ServicesSection,
-  WorkSection,
   AboutSection,
+  WorkSection,
   ContactSection,
   Footer,
 } from './components/sections';
@@ -39,9 +38,8 @@ export default function HomePage() {
       {/* Main Content - scrolls over the WebGL canvas */}
       <main className="relative z-10">
         <HeroSection />
-        <ServicesSection />
-        <WorkSection />
         <AboutSection />
+        <WorkSection />
         <ContactSection />
         <Footer />
       </main>

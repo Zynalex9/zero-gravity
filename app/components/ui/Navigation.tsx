@@ -9,9 +9,8 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'Home', href: '#hero' },
-  { label: 'Services', href: '#services' },
-  { label: 'Work', href: '#work' },
   { label: 'About', href: '#about' },
+  { label: 'Work', href: '#work' },
   { label: 'Contact', href: '#contact' },
 ];
 
@@ -31,15 +30,12 @@ export function Navigation() {
     <nav className="fixed top-0 left-0 right-0 z-50 px-4 py-4 md:px-8">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
-        <a 
-          href="#hero" 
+        <a
+          href="#hero"
           onClick={(e) => handleNavClick(e, '#hero')}
-          className="text-xl md:text-2xl font-bold tracking-tight"
+          className="font-serif text-xl md:text-2xl font-bold tracking-tight"
         >
-          <span className="text-white">ZERO</span>
-          <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-            GRAVITY
-          </span>
+          <span className="text-metallic">ZERO GRAVITY</span>
         </a>
 
         {/* Desktop Navigation */}
@@ -49,24 +45,24 @@ export function Navigation() {
               key={item.href}
               href={item.href}
               onClick={(e) => handleNavClick(e, item.href)}
-              className="text-white/70 hover:text-white transition-colors duration-200 text-sm tracking-wide"
+              className="text-[#f5f0e8]/70 hover:text-[#f5f0e8] transition-colors duration-200 text-sm tracking-wide"
             >
               {item.label}
             </a>
           ))}
           <a
-            href="#contact"
-            onClick={(e) => handleNavClick(e, '#contact')}
-            className="px-6 py-2 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full text-white text-sm font-medium hover:opacity-90 transition-opacity"
+            href="/cv.pdf"
+            target="_blank"
+            className="pill-badge hover:bg-[#2a2a2a] transition-colors"
           >
-            Get Started
+            Download CV
           </a>
         </div>
 
         {/* Mobile Menu Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-white p-2"
+          className="md:hidden text-[#f5f0e8] p-2"
           aria-label={isOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={isOpen}
         >
@@ -97,24 +93,24 @@ export function Navigation() {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-black/90 backdrop-blur-lg border-t border-white/10">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-[#0a0a0a]/95 backdrop-blur-lg border-t border-[#f5f0e8]/10">
           <div className="flex flex-col p-4 gap-4">
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item.href)}
-                className="text-white/70 hover:text-white transition-colors duration-200 py-2"
+                className="text-[#f5f0e8]/70 hover:text-[#f5f0e8] transition-colors duration-200 py-2"
               >
                 {item.label}
               </a>
             ))}
             <a
-              href="#contact"
-              onClick={(e) => handleNavClick(e, '#contact')}
-              className="px-6 py-3 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full text-white text-center font-medium hover:opacity-90 transition-opacity"
+              href="/cv.pdf"
+              target="_blank"
+              className="pill-badge text-center justify-center"
             >
-              Get Started
+              Download CV
             </a>
           </div>
         </div>
