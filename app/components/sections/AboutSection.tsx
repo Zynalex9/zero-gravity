@@ -1,6 +1,7 @@
 'use client';
 
 import { Section } from '../ui';
+import { Phone, Instagram, Mail, Palette, Briefcase, Linkedin } from 'lucide-react';
 
 // Education data
 const education = [
@@ -205,27 +206,27 @@ export function AboutSection() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-sm">
                   <div className="flex items-center gap-2">
-                    <span>📞</span>
+                    <Phone className="w-4 h-4 text-[#f5f0e8]/70" />
                     <span className="text-[#f5f0e8]/80">(+1) 234-567-890</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span>📸</span>
+                    <Instagram className="w-4 h-4 text-[#f5f0e8]/70" />
                     <span className="text-[#f5f0e8]/80">instagram.com/zerogravity</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span>✉️</span>
+                    <Mail className="w-4 h-4 text-[#f5f0e8]/70" />
                     <span className="text-[#f5f0e8]/80">hello@zerogravity.design</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span>🎨</span>
+                    <Palette className="w-4 h-4 text-[#f5f0e8]/70" />
                     <span className="text-[#f5f0e8]/80">dribbble.com/zerogravity</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span>🅱️</span>
+                    <div className="w-4 h-4 rounded bg-[#f5f0e8]/70 flex items-center justify-center text-[8px] font-bold text-black">Bē</div>
                     <span className="text-[#f5f0e8]/80">behance.net/zerogravity</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span>💼</span>
+                    <Briefcase className="w-4 h-4 text-[#f5f0e8]/70" />
                     <span className="text-[#f5f0e8]/80">linkedin.com/company/zerogravity</span>
                   </div>
                 </div>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Section } from '../ui';
+import { Mail, Phone, MapPin, Instagram, Linkedin } from 'lucide-react';
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
@@ -25,10 +26,10 @@ export function ContactSection() {
   };
 
   const socialLinks = [
-    { name: 'Behance', url: 'https://behance.net/zerogravity', icon: '🅱️' },
-    { name: 'Dribbble', url: 'https://dribbble.com/zerogravity', icon: '🏀' },
-    { name: 'Instagram', url: 'https://instagram.com/zerogravity', icon: '📸' },
-    { name: 'LinkedIn', url: 'https://linkedin.com/company/zerogravity', icon: '💼' },
+    { name: 'Behance', url: 'https://behance.net/zerogravity', icon: 'behance' },
+    { name: 'Dribbble', url: 'https://dribbble.com/zerogravity', icon: 'dribbble' },
+    { name: 'Instagram', url: 'https://instagram.com/zerogravity', Icon: Instagram },
+    { name: 'LinkedIn', url: 'https://linkedin.com/company/zerogravity', Icon: Linkedin },
   ];
 
   return (
@@ -116,7 +117,9 @@ export function ContactSection() {
               <h3 className="font-serif text-2xl font-bold text-[#f5f0e8] mb-6">Get In Touch</h3>
               <div className="space-y-4">
                 <div className="flex items-center gap-4">
-                  <span className="text-2xl">✉️</span>
+                  <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
+                    <Mail className="w-5 h-5 text-[#f5f0e8]" />
+                  </div>
                   <div>
                     <p className="text-[#f5f0e8]/60 text-sm">Email</p>
                     <a href="mailto:hello@zerogravity.design" className="text-[#f5f0e8] hover:text-[#d4c8b8] transition-colors">
@@ -125,7 +128,9 @@ export function ContactSection() {
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="text-2xl">📞</span>
+                  <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
+                    <Phone className="w-5 h-5 text-[#f5f0e8]" />
+                  </div>
                   <div>
                     <p className="text-[#f5f0e8]/60 text-sm">Phone</p>
                     <a href="tel:+1234567890" className="text-[#f5f0e8] hover:text-[#d4c8b8] transition-colors">
@@ -134,7 +139,9 @@ export function ContactSection() {
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="text-2xl">📍</span>
+                  <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
+                    <MapPin className="w-5 h-5 text-[#f5f0e8]" />
+                  </div>
                   <div>
                     <p className="text-[#f5f0e8]/60 text-sm">Location</p>
                     <p className="text-[#f5f0e8]">San Francisco, CA</p>
@@ -154,7 +161,13 @@ export function ContactSection() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 px-4 py-3 bg-white/5 border border-[#f5f0e8]/10 rounded-lg hover:bg-white/10 transition-all group"
                   >
-                    <span className="text-xl">{social.icon}</span>
+                    {social.Icon ? (
+                      <social.Icon className="w-5 h-5 text-[#f5f0e8]/70 group-hover:text-[#f5f0e8] transition-colors" />
+                    ) : (
+                      <div className="w-5 h-5 rounded bg-[#f5f0e8]/70 group-hover:bg-[#f5f0e8] transition-colors flex items-center justify-center text-[10px] font-bold text-black">
+                        {social.icon === 'behance' ? 'Bē' : 'Dr'}
+                      </div>
+                    )}
                     <span className="text-[#f5f0e8]/70 group-hover:text-[#f5f0e8] transition-colors text-sm">
                       {social.name}
                     </span>
