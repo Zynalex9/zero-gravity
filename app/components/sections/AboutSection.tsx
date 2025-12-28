@@ -76,12 +76,12 @@ export function AboutSection() {
             {/* Photo Card */}
             <div className="portfolio-card-cream">
               {/* Profile Image Placeholder */}
-              <div className="aspect-[4/5] bg-gradient-to-br from-gray-300 to-gray-400 rounded-xl mb-4 overflow-hidden relative">
+              <div className="aspect-[4/5] bg-gradient-to-br from-gray-700 to-gray-900 rounded-xl mb-4 overflow-hidden relative">
                 <div className="absolute inset-0 bg-[url('/placeholder-profile.jpg')] bg-cover bg-center" />
                 <div className="absolute inset-0 flex items-end p-4">
-                  <div className="bg-white/90 backdrop-blur-sm rounded-lg px-4 py-2">
-                    <h3 className="font-serif text-xl font-bold text-gray-900">ZERO GRAVITY</h3>
-                    <p className="text-sm text-gray-600">Creative Design Agency • Brand Identity • Visual Art</p>
+                  <div className="bg-black/60 backdrop-blur-md rounded-lg px-4 py-2 border border-white/10">
+                    <h3 className="font-serif text-xl font-bold text-[#f5f0e8]">ZERO GRAVITY</h3>
+                    <p className="text-sm text-[#f5f0e8]/70">Creative Design Agency • Brand Identity • Visual Art</p>
                   </div>
                 </div>
               </div>
@@ -89,20 +89,20 @@ export function AboutSection() {
 
             {/* About Me Card */}
             <div className="portfolio-card-cream">
-              <h2 className="font-serif text-3xl font-bold text-gray-900 mb-4">ABOUT US</h2>
-              <p className="text-gray-700 italic mb-4">Hello,</p>
-              <p className="text-gray-600 text-sm leading-relaxed mb-4">
+              <h2 className="font-serif text-3xl font-bold text-[#f5f0e8] mb-4">ABOUT US</h2>
+              <p className="text-[#f5f0e8]/80 italic mb-4">Hello,</p>
+              <p className="text-[#f5f0e8]/70 text-sm leading-relaxed mb-4">
                 We're Zero Gravity, a creative design agency specializing in brand development
                 and visual storytelling. Our portfolio demonstrates a diverse range of impactful
                 designs, seamlessly integrating aesthetics and functionality. We collaborate
                 closely with clients to understand their unique vision, values, and goals,
                 ensuring that every project delivers a strong brand identity and achieves its objectives.
               </p>
-              <p className="text-gray-600 text-sm leading-relaxed mb-4">
+              <p className="text-[#f5f0e8]/70 text-sm leading-relaxed mb-4">
                 We are dedicated to creating visually captivating and highly effective work
                 that leaves a lasting impression and elevates brands to new heights.
               </p>
-              <p className="text-gray-700 italic text-sm">
+              <p className="text-[#f5f0e8]/80 italic text-sm">
                 Let's collaborate to create something extraordinary together.
               </p>
             </div>
@@ -115,32 +115,32 @@ export function AboutSection() {
               {/* Education & Experience Card */}
               <div className="portfolio-card-cream">
                 {/* Education */}
-                <h2 className="font-serif text-2xl font-bold text-gray-900 mb-6">EDUCATION</h2>
+                <h2 className="font-serif text-2xl font-bold text-[#f5f0e8] mb-6">EDUCATION</h2>
                 <div className="space-y-4 mb-8">
                   {education.map((item, index) => (
                     <div key={index} className="flex gap-4">
-                      <div className="pill-badge-light !bg-[#d4c8b8] !text-gray-900 text-xs font-bold">
+                      <div className="pill-badge !bg-white/10 !text-[#f5f0e8] text-xs font-bold border border-white/20">
                         {item.year}
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900 text-sm">{item.title}</h4>
-                        <p className="text-gray-600 text-xs">{item.subtitle}</p>
+                        <h4 className="font-semibold text-[#f5f0e8] text-sm">{item.title}</h4>
+                        <p className="text-[#f5f0e8]/60 text-xs">{item.subtitle}</p>
                       </div>
                     </div>
                   ))}
                 </div>
 
                 {/* Experience */}
-                <h2 className="font-serif text-2xl font-bold text-gray-900 mb-6">EXPERIENCE</h2>
+                <h2 className="font-serif text-2xl font-bold text-[#f5f0e8] mb-6">EXPERIENCE</h2>
                 <div className="space-y-4">
                   {experience.map((item, index) => (
                     <div key={index} className="flex gap-4">
-                      <div className="pill-badge-light !bg-[#d4c8b8] !text-gray-900 text-xs font-bold">
+                      <div className="pill-badge !bg-white/10 !text-[#f5f0e8] text-xs font-bold border border-white/20">
                         {item.year}
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900 text-sm">{item.title}</h4>
-                        <p className="text-gray-600 text-xs">{item.subtitle}</p>
+                        <h4 className="font-semibold text-[#f5f0e8] text-sm">{item.title}</h4>
+                        <p className="text-[#f5f0e8]/60 text-xs">{item.subtitle}</p>
                       </div>
                     </div>
                   ))}
@@ -150,7 +150,7 @@ export function AboutSection() {
               {/* Skills Card */}
               <div className="portfolio-card-cream">
                 {/* Design Software */}
-                <h2 className="font-serif text-2xl font-bold text-gray-900 mb-6">DESIGN SOFTWARE</h2>
+                <h2 className="font-serif text-2xl font-bold text-[#f5f0e8] mb-6">DESIGN SOFTWARE</h2>
                 <div className="grid grid-cols-2 gap-4 mb-8">
                   {software.map((item, index) => (
                     <div key={index} className="flex items-center gap-3">
@@ -161,7 +161,7 @@ export function AboutSection() {
                         {item.short}
                       </div>
                       <div>
-                        <p className="text-gray-900 text-sm font-medium">{item.name}</p>
+                        <p className="text-[#f5f0e8] text-sm font-medium">{item.name}</p>
                         <SkillDots rating={item.rating} />
                       </div>
                     </div>
@@ -169,12 +169,12 @@ export function AboutSection() {
                 </div>
 
                 {/* Personal Skills */}
-                <h2 className="font-serif text-2xl font-bold text-gray-900 mb-6">PERSONAL SKILLS</h2>
+                <h2 className="font-serif text-2xl font-bold text-[#f5f0e8] mb-6">PERSONAL SKILLS</h2>
                 <div className="flex flex-wrap gap-2">
                   {personalSkills.map((skill, index) => (
                     <span
                       key={index}
-                      className="px-4 py-2 border border-gray-400 rounded-full text-gray-700 text-sm"
+                      className="px-4 py-2 border border-white/20 rounded-full text-[#f5f0e8]/80 text-sm bg-white/5"
                     >
                       {skill}
                     </span>
@@ -188,45 +188,45 @@ export function AboutSection() {
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                 <div className="flex items-center gap-6">
                   {/* QR Code Placeholder */}
-                  <div className="w-24 h-24 bg-white border border-gray-200 rounded-lg flex items-center justify-center">
-                    <div className="w-20 h-20 bg-gradient-to-br from-gray-800 to-gray-600 rounded grid grid-cols-4 grid-rows-4 gap-[2px] p-1">
+                  <div className="w-24 h-24 bg-black/40 border border-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
+                    <div className="w-20 h-20 bg-gradient-to-br from-gray-600 to-gray-800 rounded grid grid-cols-4 grid-rows-4 gap-[2px] p-1">
                       {Array.from({ length: 16 }).map((_, i) => (
                         <div key={i} className={`${Math.random() > 0.4 ? 'bg-white' : 'bg-transparent'}`} />
                       ))}
                     </div>
                   </div>
                   <div>
-                    <p className="text-gray-500 text-xs mb-1">Scan to</p>
-                    <p className="text-gray-900 font-bold">view CV</p>
+                    <p className="text-[#f5f0e8]/60 text-xs mb-1">Scan to</p>
+                    <p className="text-[#f5f0e8] font-bold">view CV</p>
                   </div>
                 </div>
 
-                <h2 className="font-serif text-3xl font-bold text-gray-900">CONTACT</h2>
+                <h2 className="font-serif text-3xl font-bold text-[#f5f0e8]">CONTACT</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-sm">
                   <div className="flex items-center gap-2">
                     <span>📞</span>
-                    <span className="text-gray-700">(+1) 234-567-890</span>
+                    <span className="text-[#f5f0e8]/80">(+1) 234-567-890</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span>📸</span>
-                    <span className="text-gray-700">instagram.com/zerogravity</span>
+                    <span className="text-[#f5f0e8]/80">instagram.com/zerogravity</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span>✉️</span>
-                    <span className="text-gray-700">hello@zerogravity.design</span>
+                    <span className="text-[#f5f0e8]/80">hello@zerogravity.design</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span>🎨</span>
-                    <span className="text-gray-700">dribbble.com/zerogravity</span>
+                    <span className="text-[#f5f0e8]/80">dribbble.com/zerogravity</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span>🅱️</span>
-                    <span className="text-gray-700">behance.net/zerogravity</span>
+                    <span className="text-[#f5f0e8]/80">behance.net/zerogravity</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span>💼</span>
-                    <span className="text-gray-700">linkedin.com/company/zerogravity</span>
+                    <span className="text-[#f5f0e8]/80">linkedin.com/company/zerogravity</span>
                   </div>
                 </div>
               </div>

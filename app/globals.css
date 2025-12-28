@@ -1,10 +1,10 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
 
 :root {
   --background: #0a0a0a;
   --foreground: #ffffff;
-  
+
   /* New portfolio colors */
   --cream: #f5f0e8;
   --cream-dark: #e8e0d0;
@@ -48,14 +48,12 @@ body {
 
 /* Metallic gradient text effect */
 .text-metallic {
-  background: linear-gradient(
-    180deg,
-    #f5f0e8 0%,
-    #d4c8b8 25%,
-    #a89880 50%,
-    #d4c8b8 75%,
-    #f5f0e8 100%
-  );
+  background: linear-gradient(180deg,
+      #f5f0e8 0%,
+      #d4c8b8 25%,
+      #a89880 50%,
+      #d4c8b8 75%,
+      #f5f0e8 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -64,16 +62,14 @@ body {
 
 /* Chrome/metallic effect for headings */
 .text-chrome {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.9) 0%,
-    rgba(200, 190, 170, 0.8) 20%,
-    rgba(120, 110, 90, 0.9) 45%,
-    rgba(80, 70, 55, 1) 50%,
-    rgba(120, 110, 90, 0.9) 55%,
-    rgba(200, 190, 170, 0.8) 80%,
-    rgba(255, 255, 255, 0.9) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(200, 190, 170, 0.8) 20%,
+      rgba(120, 110, 90, 0.9) 45%,
+      rgba(80, 70, 55, 1) 50%,
+      rgba(120, 110, 90, 0.9) 55%,
+      rgba(200, 190, 170, 0.8) 80%,
+      rgba(255, 255, 255, 0.9) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -121,17 +117,22 @@ body {
 
 /* Card styles */
 .portfolio-card {
-  background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
   border: 1px solid rgba(245, 240, 232, 0.1);
   border-radius: 1.5rem;
   padding: 2rem;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .portfolio-card-cream {
-  background: var(--cream);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%);
+  border: 1px solid rgba(245, 240, 232, 0.15);
   border-radius: 1.5rem;
   padding: 2rem;
-  color: #1a1a1a;
+  backdrop-filter: blur(24px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  color: #f5f0e8;
 }
 
 /* Gallery grid */
@@ -188,6 +189,7 @@ body {
 
 /* Reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -214,11 +216,9 @@ body {
 /* Section divider line */
 .section-line {
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(245, 240, 232, 0.3) 20%,
-    rgba(245, 240, 232, 0.3) 80%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(245, 240, 232, 0.3) 20%,
+      rgba(245, 240, 232, 0.3) 80%,
+      transparent 100%);
 }
