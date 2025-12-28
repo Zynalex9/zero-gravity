@@ -1,7 +1,7 @@
 'use client';
 
 import { SpaceBackground } from './components/three';
-import { Navigation } from './components/ui';
+import { Navigation, Preloader } from './components/ui';
 import {
   HeroSection,
   AboutSection,
@@ -24,6 +24,9 @@ export default function HomePage() {
 
   return (
     <>
+      {/* Preloader */}
+      <Preloader />
+
       {/* Fixed 3D Space Background */}
       <SpaceBackground
         scrollProgress={scrollProgress}

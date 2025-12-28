@@ -1,6 +1,6 @@
 'use client';
 
-import { Section } from '../ui';
+import { Section, AnimatedSection, StaggerContainer } from '../ui';
 
 interface Project {
   id: number;
@@ -47,34 +47,42 @@ export function WorkSection() {
       <div className="container mx-auto px-4 md:px-8 max-w-7xl">
 
         {/* Section Header - POSTERS */}
-        <div className="text-center mb-12 relative">
-          {/* Decorative stars */}
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 hidden md:flex items-center gap-8">
-            <span className="decorative-star">✦</span>
-            <div className="w-24 h-[1px] bg-[#f5f0e8]/30"></div>
-          </div>
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden md:flex items-center gap-8">
-            <div className="w-24 h-[1px] bg-[#f5f0e8]/30"></div>
-            <span className="decorative-star">✦</span>
-          </div>
+        <AnimatedSection delay={0.1}>
+          <div className="text-center mb-12 relative">
+            {/* Decorative stars */}
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 hidden md:flex items-center gap-8">
+              <span className="decorative-star">✦</span>
+              <div className="w-24 h-[1px] bg-[#f5f0e8]/30"></div>
+            </div>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden md:flex items-center gap-8">
+              <div className="w-24 h-[1px] bg-[#f5f0e8]/30"></div>
+              <span className="decorative-star">✦</span>
+            </div>
 
-          <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-metallic">
-            POSTERS
-          </h2>
-          <p className="mt-4 text-[#f5f0e8]/60 font-cursive text-lg">Personal Projects</p>
-        </div>
+            <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-metallic">
+              POSTERS
+            </h2>
+            <p className="mt-4 text-[#f5f0e8]/60 font-cursive text-lg">Personal Projects</p>
+          </div>
+        </AnimatedSection>
 
         {/* Album Covers Section */}
         <div className="mb-12">
-          <div className="flex items-center gap-4 mb-6">
-            <span className="decorative-star text-[#f5f0e8]">❋</span>
-            <h3 className="font-serif text-2xl md:text-3xl font-bold text-[#f5f0e8]">ALBUM COVERS</h3>
-            <div className="flex-1 h-[1px] bg-[#f5f0e8]/20 hidden md:block"></div>
-            <p className="text-[#f5f0e8]/60 text-sm font-cursive hidden md:block">Of various songs and albums</p>
-          </div>
+          <AnimatedSection delay={0.2}>
+            <div className="flex items-center gap-4 mb-6">
+              <span className="decorative-star text-[#f5f0e8]">❋</span>
+              <h3 className="font-serif text-2xl md:text-3xl font-bold text-[#f5f0e8]">ALBUM COVERS</h3>
+              <div className="flex-1 h-[1px] bg-[#f5f0e8]/20 hidden md:block"></div>
+              <p className="text-[#f5f0e8]/60 text-sm font-cursive hidden md:block">Of various songs and albums</p>
+            </div>
+          </AnimatedSection>
 
-          {/* Gallery Grid */}
-          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-2 md:gap-3">
+          {/* Gallery Grid with Stagger Animation */}
+          <StaggerContainer
+            className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-2 md:gap-3"
+            staggerDelay={0.05}
+            variant="scale"
+          >
             {albumCovers.map((project) => (
               <div
                 key={project.id}
@@ -93,20 +101,26 @@ export function WorkSection() {
                 </div>
               </div>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
 
         {/* Social Posts Section */}
         <div>
-          <div className="flex items-center gap-4 mb-6">
-            <span className="decorative-star text-[#f5f0e8]">❋</span>
-            <h3 className="font-serif text-2xl md:text-3xl font-bold text-[#f5f0e8]">SOCIAL MEDIA</h3>
-            <div className="flex-1 h-[1px] bg-[#f5f0e8]/20 hidden md:block"></div>
-            <p className="text-[#f5f0e8]/60 text-sm font-cursive hidden md:block">Instagram posts & stories</p>
-          </div>
+          <AnimatedSection delay={0.3}>
+            <div className="flex items-center gap-4 mb-6">
+              <span className="decorative-star text-[#f5f0e8]">❋</span>
+              <h3 className="font-serif text-2xl md:text-3xl font-bold text-[#f5f0e8]">SOCIAL MEDIA</h3>
+              <div className="flex-1 h-[1px] bg-[#f5f0e8]/20 hidden md:block"></div>
+              <p className="text-[#f5f0e8]/60 text-sm font-cursive hidden md:block">Instagram posts & stories</p>
+            </div>
+          </AnimatedSection>
 
-          {/* Social Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
+          {/* Social Grid with Stagger Animation */}
+          <StaggerContainer
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4"
+            staggerDelay={0.08}
+            variant="scale"
+          >
             {socialPosts.map((project) => (
               <div
                 key={project.id}
@@ -134,15 +148,17 @@ export function WorkSection() {
                 </div>
               </div>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
 
         {/* View All Button */}
-        <div className="text-center mt-12">
-          <button className="pill-badge hover:bg-[#2a2a2a] transition-colors">
-            View All Projects →
-          </button>
-        </div>
+        <AnimatedSection delay={0.4}>
+          <div className="text-center mt-12">
+            <button className="pill-badge hover:bg-[#2a2a2a] transition-colors">
+              View All Projects →
+            </button>
+          </div>
+        </AnimatedSection>
       </div>
     </Section>
   );
