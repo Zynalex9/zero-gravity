@@ -4,7 +4,7 @@ import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react';
 import { Starfield } from './Starfield';
 import { SpaceObjects } from './SpaceObjects';
-import { Astronaut } from './Astronaut';
+// import { Astronaut } from './Astronaut';
 import { CameraController } from './CameraController';
 
 interface SpaceSceneProps {
@@ -69,10 +69,10 @@ export function SpaceScene({
           />
           
           {/* Floating astronaut */}
-          <Astronaut 
+          {/* <Astronaut 
             mousePosition={mousePosition} 
             reducedMotion={reducedMotion} 
-          />
+          /> */}
         </Suspense>
       </Canvas>
     </div>
