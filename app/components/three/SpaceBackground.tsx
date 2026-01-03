@@ -12,9 +12,9 @@ const SpaceScene = dynamic(
         className="fixed inset-0 w-full h-full"
         style={{ 
           background: `
-            radial-gradient(ellipse at 0% 0%, rgba(180, 80, 20, 0.25) 0%, transparent 50%),
-            radial-gradient(ellipse at 100% 0%, rgba(160, 70, 15, 0.2) 0%, transparent 45%),
-            #050608
+            radial-gradient(ellipse at 50% 20%, rgba(30, 60, 120, 0.15) 0%, transparent 50%),
+            radial-gradient(ellipse at 70% 60%, rgba(40, 80, 140, 0.12) 0%, transparent 45%),
+            #0a0e1a
           `,
           zIndex: 0 
         }}

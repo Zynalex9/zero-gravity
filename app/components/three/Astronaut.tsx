@@ -96,7 +96,7 @@ function AstronautModel({ mousePosition, reducedMotion }: AstronautProps) {
 // PNG Billboard fallback version
 function AstronautBillboard({ mousePosition, reducedMotion }: AstronautProps) {
   const groupRef = useRef<THREE.Group>(null);
-  const texture = useTexture('/images/astronaut.png');
+  const texture = useTexture('/Logo.png');
 
   useFrame((state) => {
     if (!groupRef.current || reducedMotion) return;

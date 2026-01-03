@@ -23,18 +23,18 @@ export const STARFIELD_CONFIG = {
   maxStarSize: 1.8,
   // Rotation speed multiplier
   rotationSpeed: 0.02,
-  // Rich NASA-style color palette
+  // Glowy dark blue star palette inspired by deep space
   colors: {
-    // Cool blues (distant, cold stars)
-    blues: ['#a8d4ff', '#7ec8ff', '#5bb5ff', '#3da2ff', '#c4e3ff'],
-    // Warm oranges/yellows (closer, warmer stars)  
-    warm: ['#ffd699', '#ffcc80', '#ffb347', '#ffa500', '#ffe4b5'],
-    // Pure whites (bright main sequence)
-    whites: ['#ffffff', '#f8f8ff', '#fefefe', '#f5f5f5'],
-    // Subtle purples/magentas (nebula-touched)
-    purples: ['#e6b3ff', '#d9a3ff', '#cc99ff', '#bf8fff'],
-    // Deep reds (cooler red giants in distance)
-    reds: ['#ffb3b3', '#ff9999', '#ff8080'],
+    // Dominant dark blues (glowy, like in the image)
+    blues: ['#5a8fc4', '#4d7fb8', '#6a9dd6', '#4a7cb5', '#5985c7', '#3d6fa3'],
+    // Lighter blue accents (fewer, brighter stars)
+    lightBlues: ['#7db3e8', '#8fc5ff', '#a1d2ff'],
+    // Deep blues (distant, atmospheric)
+    deepBlues: ['#2d4a70', '#345580', '#3b5f8f', '#294060'],
+    // Subtle whites (very few, brightest stars)
+    whites: ['#d4e4f7', '#e0ebf8', '#c5d9f2'],
+    // Muted purples (nebula-touched, rare)
+    purples: ['#7a8fc9', '#8a9dd9', '#6a7db8'],
   },
 };
 
@@ -129,13 +129,13 @@ interface StarfieldProps {
 // Helper to get all colors as flat array with weights
 function getWeightedColors() {
   const colors = STARFIELD_CONFIG.colors;
-  // More whites and blues, fewer warm and purples for realistic distribution
+  // Dominated by various blue tones for glowy dark blue aesthetic
   return [
-    ...colors.whites, ...colors.whites, ...colors.whites, // 12 whites (most common)
-    ...colors.blues, ...colors.blues, // 10 blues (common)
-    ...colors.warm, // 5 warm (less common)
-    ...colors.purples, // 4 purples (rare)
-    ...colors.reds, // 3 reds (rare)
+    ...colors.blues, ...colors.blues, ...colors.blues, // Dark blues dominant
+    ...colors.deepBlues, ...colors.deepBlues, // Deep blues common
+    ...colors.lightBlues, // Lighter blues for accent
+    ...colors.whites, // Few bright whites
+    ...colors.purples, // Rare purple tints
   ];
 }
 
@@ -383,10 +383,10 @@ function BrightStars({ starCount, reducedMotion }: { starCount: number; reducedM
     
     // Bright stars have more vivid colors
     const brightColors = [
-      ...STARFIELD_CONFIG.colors.blues.map(c => new THREE.Color(c)),
-      ...STARFIELD_CONFIG.colors.warm.map(c => new THREE.Color(c)),
-      ...STARFIELD_CONFIG.colors.whites.map(c => new THREE.Color(c)),
-      ...STARFIELD_CONFIG.colors.purples.map(c => new THREE.Color(c)),
+      ...STARFIELD_CONFIG.colors.blues.map((c: string) => new THREE.Color(c)),
+      ...STARFIELD_CONFIG.colors.lightBlues.map((c: string) => new THREE.Color(c)),
+      ...STARFIELD_CONFIG.colors.whites.map((c: string) => new THREE.Color(c)),
+      ...STARFIELD_CONFIG.colors.purples.map((c: string) => new THREE.Color(c)),
     ];
 
     for (let i = 0; i < count; i++) {
@@ -445,7 +445,7 @@ function createNebulaTexture(
   color3: string
 ): THREE.CanvasTexture {
   const canvas = document.createElement('canvas');
-  const size = 512;
+  const size = 1024;
   canvas.width = size;
   canvas.height = size;
   const ctx = canvas.getContext('2d')!;
@@ -458,34 +458,40 @@ function createNebulaTexture(
   const centerX = size / 2;
   const centerY = size / 2;
 
-  // Main nebula glow
-  const gradient1 = ctx.createRadialGradient(
-    centerX * 0.3, centerY * 0.5, 0,
-    centerX * 0.3, centerY * 0.5, size * 0.8
-  );
-  gradient1.addColorStop(0, color1 + '40');
-  gradient1.addColorStop(0.3, color1 + '25');
-  gradient1.addColorStop(0.6, color2 + '15');
-  gradient1.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = gradient1;
-  ctx.fillRect(0, 0, size, size);
+  // Create multiple overlapping gradient clouds for organic shape
+  const cloudPositions = [
+    { x: centerX * 0.4, y: centerY * 0.5, radius: size * 0.9 },
+    { x: centerX * 1.3, y: centerY * 0.7, radius: size * 0.7 },
+    { x: centerX * 0.8, y: centerY * 1.2, radius: size * 0.6 },
+    { x: centerX * 1.5, y: centerY * 0.3, radius: size * 0.5 },
+    { x: centerX * 0.3, y: centerY * 1.1, radius: size * 0.55 },
+  ];
 
-  // Secondary cloud
-  const gradient2 = ctx.createRadialGradient(
-    centerX * 1.5, centerY * 0.8, 0,
-    centerX * 1.5, centerY * 0.8, size * 0.6
-  );
-  gradient2.addColorStop(0, color2 + '35');
-  gradient2.addColorStop(0.4, color3 + '20');
-  gradient2.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = gradient2;
-  ctx.fillRect(0, 0, size, size);
+  cloudPositions.forEach((cloud, index) => {
+    const gradient = ctx.createRadialGradient(
+      cloud.x, cloud.y, 0,
+      cloud.x, cloud.y, cloud.radius
+    );
+    
+    const opacity = ['50', '35', '25', '30', '28'][index];
+    const colors = [color1, color2, color3];
+    const mainColor = colors[index % 3];
+    const secondColor = colors[(index + 1) % 3];
+    
+    gradient.addColorStop(0, mainColor + opacity);
+    gradient.addColorStop(0.3, mainColor + '20');
+    gradient.addColorStop(0.6, secondColor + '10');
+    gradient.addColorStop(1, 'rgba(0,0,0,0)');
+    
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, size, size);
+  });
 
-  // Add noise for texture
+  // Add subtle noise for texture
   const imageData = ctx.getImageData(0, 0, size, size);
   const data = imageData.data;
   for (let i = 0; i < data.length; i += 4) {
-    const noise = (Math.random() - 0.5) * 20;
+    const noise = (Math.random() - 0.5) * 12;
     data[i] = Math.max(0, Math.min(255, data[i] + noise));
     data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + noise));
     data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + noise));
@@ -497,19 +503,24 @@ function createNebulaTexture(
   return texture;
 }
 
-// Nebula clouds - warm cosmic dust effect
+// Nebula clouds - blue cosmic dust and gas effect
 function NebulaClouds({ reducedMotion }: { reducedMotion: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
 
-  // Create nebula textures
-  const warmNebulaTexture = useMemo(() => {
+  // Create nebula textures with blue gas colors
+  const deepBlueNebula = useMemo(() => {
     if (typeof document === 'undefined') return null;
-    return createNebulaTexture('#ff6b35', '#ff8c42', '#ffa559');
+    return createNebulaTexture('#1e3a5f', '#2a4d7c', '#3d5f8f');
   }, []);
 
-  const coolNebulaTexture = useMemo(() => {
+  const lightBlueNebula = useMemo(() => {
     if (typeof document === 'undefined') return null;
-    return createNebulaTexture('#1a5fb4', '#3584e4', '#62a0ea');
+    return createNebulaTexture('#4a7cb5', '#5a8fc4', '#6a9dd6');
+  }, []);
+
+  const cyanNebula = useMemo(() => {
+    if (typeof document === 'undefined') return null;
+    return createNebulaTexture('#2d5a7b', '#3d6a8b', '#4d7a9b');
   }, []);
 
   useFrame((state, delta) => {
@@ -519,24 +530,37 @@ function NebulaClouds({ reducedMotion }: { reducedMotion: boolean }) {
 
   return (
     <group ref={groupRef}>
-      {/* Left side warm nebula */}
-      <mesh position={[-70, 10, -100]} rotation={[0, 0, 0.3]}>
-        <planeGeometry args={[120, 100]} />
+      {/* Large background nebula - very far */}
+      <mesh position={[0, 0, -150]} rotation={[0.1, 0, 0.15]}>
+        <planeGeometry args={[280, 220]} />
         <meshBasicMaterial
-          map={warmNebulaTexture}
+          map={deepBlueNebula}
           transparent
-          opacity={0.35}
+          opacity={0.28}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
           side={THREE.DoubleSide}
         />
       </mesh>
 
-      {/* Right side warm nebula */}
-      <mesh position={[75, -15, -110]} rotation={[0, 0, -0.2]}>
-        <planeGeometry args={[100, 90]} />
+      {/* Left side deep blue nebula */}
+      <mesh position={[-70, 10, -110]} rotation={[0.05, 0, 0.4]}>
+        <planeGeometry args={[160, 140]} />
         <meshBasicMaterial
-          map={warmNebulaTexture}
+          map={deepBlueNebula}
+          transparent
+          opacity={0.32}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Right side light blue nebula */}
+      <mesh position={[80, -15, -120]} rotation={[-0.03, 0, -0.25]}>
+        <planeGeometry args={[150, 130]} />
+        <meshBasicMaterial
+          map={lightBlueNebula}
           transparent
           opacity={0.3}
           blending={THREE.AdditiveBlending}
@@ -545,26 +569,104 @@ function NebulaClouds({ reducedMotion }: { reducedMotion: boolean }) {
         />
       </mesh>
 
-      {/* Top right cool nebula hint */}
-      <mesh position={[50, 45, -120]} rotation={[0, 0, 0.5]}>
-        <planeGeometry args={[80, 70]} />
+      {/* Top right cyan nebula */}
+      <mesh position={[50, 50, -125]} rotation={[0.08, 0, 0.6]}>
+        <planeGeometry args={[120, 110]} />
         <meshBasicMaterial
-          map={coolNebulaTexture}
+          map={cyanNebula}
           transparent
-          opacity={0.2}
+          opacity={0.28}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
           side={THREE.DoubleSide}
         />
       </mesh>
 
-      {/* Bottom warm glow */}
-      <mesh position={[-20, -50, -90]} rotation={[0, 0, 0.1]}>
-        <planeGeometry args={[140, 60]} />
+      {/* Bottom cyan-blue glow */}
+      <mesh position={[-25, -55, -100]} rotation={[-0.05, 0, 0.2]}>
+        <planeGeometry args={[180, 90]} />
         <meshBasicMaterial
-          map={warmNebulaTexture}
+          map={cyanNebula}
+          transparent
+          opacity={0.35}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Upper left blue gas cloud */}
+      <mesh position={[-90, 60, -135]} rotation={[0.06, 0, -0.5]}>
+        <planeGeometry args={[140, 120]} />
+        <meshBasicMaterial
+          map={deepBlueNebula}
+          transparent
+          opacity={0.26}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Lower right gas cloud */}
+      <mesh position={[95, -65, -130]} rotation={[-0.04, 0, 0.7]}>
+        <planeGeometry args={[130, 115]} />
+        <meshBasicMaterial
+          map={lightBlueNebula}
+          transparent
+          opacity={0.29}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Top center nebula cloud */}
+      <mesh position={[-30, 75, -118]} rotation={[0.07, 0, 0.3]}>
+        <planeGeometry args={[145, 125]} />
+        <meshBasicMaterial
+          map={cyanNebula}
+          transparent
+          opacity={0.27}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Mid-left nebula wisp */}
+      <mesh position={[-105, -30, -112]} rotation={[-0.02, 0, -0.4]}>
+        <planeGeometry args={[125, 140]} />
+        <meshBasicMaterial
+          map={lightBlueNebula}
           transparent
           opacity={0.25}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Mid-right cyan wisp */}
+      <mesh position={[110, 20, -108]} rotation={[0.04, 0, -0.6]}>
+        <planeGeometry args={[135, 110]} />
+        <meshBasicMaterial
+          map={cyanNebula}
+          transparent
+          opacity={0.24}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Bottom left nebula */}
+      <mesh position={[-80, -70, -115]} rotation={[-0.06, 0, 0.35]}>
+        <planeGeometry args={[120, 100]} />
+        <meshBasicMaterial
+          map={deepBlueNebula}
+          transparent
+          opacity={0.26}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
           side={THREE.DoubleSide}

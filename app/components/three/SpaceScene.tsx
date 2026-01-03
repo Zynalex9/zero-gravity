@@ -25,11 +25,11 @@ export function SpaceScene({
       className="fixed inset-0 w-full h-full"
       style={{ 
         background: `
-          radial-gradient(ellipse at 0% 0%, rgba(180, 80, 20, 0.25) 0%, transparent 50%),
-          radial-gradient(ellipse at 100% 0%, rgba(160, 70, 15, 0.2) 0%, transparent 45%),
-          radial-gradient(ellipse at 100% 100%, rgba(140, 60, 10, 0.15) 0%, transparent 40%),
-          radial-gradient(ellipse at 0% 100%, rgba(120, 50, 10, 0.12) 0%, transparent 35%),
-          #050608
+          radial-gradient(ellipse at 50% 20%, rgba(30, 60, 120, 0.15) 0%, transparent 50%),
+          radial-gradient(ellipse at 70% 60%, rgba(40, 80, 140, 0.12) 0%, transparent 45%),
+          radial-gradient(ellipse at 30% 80%, rgba(35, 70, 130, 0.1) 0%, transparent 40%),
+          radial-gradient(ellipse at 10% 40%, rgba(25, 55, 110, 0.08) 0%, transparent 35%),
+          #0a0e1a
         `,
         zIndex: 0 
       }}
@@ -46,7 +46,7 @@ export function SpaceScene({
         }}
       >
         {/* Fog for depth effect - adjusted for richer color */}
-        <fog attach="fog" args={['#050810', 50, 180]} />
+        <fog attach="fog" args={['#0a0e1a', 50, 180]} />
         
         <Suspense fallback={null}>
           {/* Camera controller for scroll-driven zoom */}
