@@ -115,8 +115,8 @@ function easeInCubic(t: number): number {
 
 // Calculate visibility, opacity, and animation progress based on scroll range
 function useVisibility(
-  scrollProgress: number, 
-  start: number, 
+  scrollProgress: number,
+  start: number,
   end: number,
   direction: 'left' | 'right' = 'left'
 ) {
@@ -149,12 +149,12 @@ function useVisibility(
   const offscreenDistance = 60; // How far offscreen to start
   const xOffset = (1 - animationProgress) * offscreenDistance * (direction === 'left' ? -1 : 1);
 
-  return { 
+  return {
     visible: inRange || progress > -0.1, // Keep visible slightly before/after for smooth transition
-    opacity: inRange ? opacity : 0, 
+    opacity: inRange ? opacity : 0,
     progress,
     xOffset,
-    animationProgress 
+    animationProgress
   };
 }
 
@@ -173,7 +173,7 @@ function MarsPlanet({
   const atmosphereRef = useRef<THREE.Mesh>(null);
   const smoothX = useRef(-78); // Start offscreen
   const smoothOpacity = useRef(0);
-  
+
   const { visible, opacity, xOffset } = useVisibility(
     scrollProgress,
     SPACE_OBJECTS_CONFIG.sections.services.start,
@@ -199,11 +199,11 @@ function MarsPlanet({
     const smoothFactor = 0.08;
     smoothX.current = lerp(smoothX.current, targetX, smoothFactor);
     smoothOpacity.current = lerp(smoothOpacity.current, targetOpacity, smoothFactor);
-    
+
     if (groupRef.current) {
       groupRef.current.position.x = smoothX.current;
     }
-    
+
     if (meshRef.current) {
       (meshRef.current.material as THREE.MeshStandardMaterial).opacity = smoothOpacity.current * 0.95;
       if (!reducedMotion) meshRef.current.rotation.y += delta * 0.03;
@@ -260,7 +260,7 @@ function SaturnPlanet({
   const atmosphereRef = useRef<THREE.Mesh>(null);
   const smoothX = useRef(82); // Start offscreen right
   const smoothOpacity = useRef(0);
-  
+
   const { visible, opacity, xOffset } = useVisibility(
     scrollProgress,
     SPACE_OBJECTS_CONFIG.sections.work.start,
@@ -303,7 +303,7 @@ function SaturnPlanet({
     const smoothFactor = 0.08;
     smoothX.current = lerp(smoothX.current, targetX, smoothFactor);
     smoothOpacity.current = lerp(smoothOpacity.current, opacity, smoothFactor);
-    
+
     if (groupRef.current) {
       groupRef.current.position.x = smoothX.current;
       if (!reducedMotion) groupRef.current.rotation.y += delta * 0.02;
@@ -353,7 +353,7 @@ function EarthPlanet({
   const atmosphereRef = useRef<THREE.Mesh>(null);
   const smoothX = useRef(-80); // Start offscreen left
   const smoothOpacity = useRef(0);
-  
+
   const { visible, opacity, xOffset } = useVisibility(
     scrollProgress,
     SPACE_OBJECTS_CONFIG.sections.about.start,
@@ -442,7 +442,7 @@ function EarthPlanet({
     const smoothFactor = 0.08;
     smoothX.current = lerp(smoothX.current, targetX, smoothFactor);
     smoothOpacity.current = lerp(smoothOpacity.current, opacity, smoothFactor);
-    
+
     if (groupRef.current) {
       groupRef.current.position.x = smoothX.current;
     }
@@ -492,7 +492,7 @@ function IceGiant({
   const atmosphereRef = useRef<THREE.Mesh>(null);
   const smoothX = useRef(78); // Start offscreen right
   const smoothOpacity = useRef(0);
-  
+
   const { visible, opacity, xOffset } = useVisibility(
     scrollProgress,
     SPACE_OBJECTS_CONFIG.sections.contact.start,
@@ -531,7 +531,7 @@ function IceGiant({
     const smoothFactor = 0.08;
     smoothX.current = lerp(smoothX.current, targetX, smoothFactor);
     smoothOpacity.current = lerp(smoothOpacity.current, opacity, smoothFactor);
-    
+
     if (groupRef.current) {
       groupRef.current.position.x = smoothX.current;
     }

@@ -222,3 +222,8 @@ body {
       rgba(245, 240, 232, 0.3) 80%,
       transparent 100%);
 }
+
+/* Radial gradient utility */
+.bg-gradient-radial {
+  background: radial-gradient(circle, var(--tw-gradient-stops));
+}
