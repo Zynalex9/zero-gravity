@@ -67,7 +67,7 @@ export function HeroSection() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.5, ease: 'easeOut' }}
-            className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight leading-none relative z-10 text-center mt-1"
+            className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight leading-none relative z-10 text-center mt-1"
             style={{
               color: '#f5f0e8',
               textShadow: `
@@ -87,7 +87,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7, ease: 'easeOut' }}
-          className="mt-12 md:mt-16 text-[#f5f0e8]/60 text-sm md:text-base tracking-[0.3em] uppercase"
+          className="mt-8 md:mt-12 text-[#f5f0e8]/60 text-sm md:text-base tracking-[0.3em] uppercase"
         >
           Graphic Designer • Brand Identity • Visual Art
         </motion.p>
