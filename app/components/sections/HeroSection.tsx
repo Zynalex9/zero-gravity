@@ -19,21 +19,33 @@ export function HeroSection() {
         <div className="relative flex flex-col items-center w-full gap-1">
 
           {/* Logo at the top - Animated */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: 'easeOut' }}
-            className="relative z-10 mb-1"
-          >
-            <Image 
-              src="/Logo.png" 
-              alt="Zero Gravity Logo" 
-              width={150} 
-              height={150}
-              className="w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 object-contain"
-              priority
-            />
-          </motion.div>
+            <motion.div
+                          initial={{ opacity: 0 ,y:-20}}
+                          animate={{ 
+                            opacity: 1, 
+                            y: [0, -15, 0], 
+                          }}
+                          transition={{ 
+                            opacity: { duration: 6, delay: 0 }, 
+                            y: { 
+                duration: 4, 
+                repeat: Infinity, 
+                ease: "easeInOut",
+                delay: 1.2
+              } 
+                          }}
+                          className="relative z-20 mb-[-10px] md:mb-[-10px] lg:mb-[-30px]"
+                          style={{ filter: 'drop-shadow(0 0 15px rgba(154, 190, 228, 0.4))' }}
+                        >
+              <Image 
+                src="/mainguy.png" 
+                alt="Zero Gravity Logo" 
+                width={400} 
+                height={400}
+                className="w-32 h-32 md:w-48 md:h-48 lg:w-64 lg:h-64 object-contain "
+                priority
+              />
+            </motion.div>
 
           {/* Lens Flare / Glare Effect - Animated */}
           <motion.div
@@ -87,7 +99,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7, ease: 'easeOut' }}
-          className="mt-8 md:mt-12 text-[#f5f0e8]/60 text-sm md:text-base tracking-[0.3em] uppercase"
+          className="mt-8 md:mt-3 text-[#f5f0e8]/60 text-sm md:text-base tracking-[0.3em] uppercase"
         >
           Graphic Designer • Brand Identity • Visual Art
         </motion.p>
