@@ -1,10 +1,22 @@
 "use client";
-
+import { useRef } from 'react'; 
+import { useScroll, useTransform } from 'framer-motion';
 import { Section } from "../ui";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
 export function HeroSection() {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.15]);
+  const x = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 450]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8, 1], [1, 0.8, 0.6]);
+
   const scrollToWork = () => {
     const element = document.querySelector("#work");
     if (element) {
@@ -13,35 +25,50 @@ export function HeroSection() {
   };
 
   return (
-    <Section id="hero" className="pt-6">
+  <Section id="hero" ref={containerRef} className="pt-6 relative min-h-screen">
       <div className="container mx-auto px-4 md:px-8 flex flex-col items-center justify-center h-full max-w-7xl">
         {/* Main Banner Content */}
-        <div className="relative flex flex-col items-center w-full gap-1">
-          {/* Logo at the top - Animated */}
+
+        <div className=" flex items-center">
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: [0, -15, 0] }}
-            transition={{
-              opacity: { duration: 5, delay: 1.9 },
-              y: {
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1.2,
-              },
-            }}
-            className="relative z-20 mb-[-10px] md:mb-[-10px] lg:mb-[-30px]"
-            style={{ filter: "drop-shadow(0 0 15px rgba(154, 190, 228, 0.4))" }}
-          >
+  style={{ 
+    scale,
+    x,       
+    y,       
+    opacity,
+    filter: 'drop-shadow(0 0 15px rgba(154, 190, 228, 0.4))' 
+  }}
+                className="relative z-20 mb-[-60px]">
+
+          
+          {/* //   // initial={{ opacity: 0, y: -20 }}
+          //   // animate={{ opacity: 1, y: [0, -15, 0] }} // moves up and down animation
+          //   // transition={{
+          //   //   opacity: { duration: 5, delay: 1.9 },
+          //   //   y: {
+          //   //     duration: 4,
+          //   //     repeat: Infinity,
+          //   //     ease: "easeInOut",
+          //   //     delay: 1.2,
+          //   //   },
+          //   // }}
+          //   className="relative z-20 mb-[-10px] md:mb-[-10px] lg:mb-[-30px]"
+          //   // style={{ filter: "drop-shadow(0 0 15px rgba(154, 190, 228, 0.4))" }}
+          // > */}
             <Image
-              src="/mainguy.png"
+              src="/sideguy.png"
               alt="Zero Gravity Logo"
               width={600}
               height={600}
-              className="w-60 h-60 md:w-70 md:h-70 lg:w-70 lg:h-70 object-contain "
+              // md:w-70 md:h-70 lg:w-70 lg:h-90
+              className="w-[400px] object-contain   "
               priority
             />
           </motion.div>
+
+        <div className="relative flex flex-col items-center w-auto gap-1">
+          {/* Logo at the top - Animated */}
+          
 
           {/* Lens Flare / Glare Effect - Animated */}
           <motion.div
@@ -49,7 +76,7 @@ export function HeroSection() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
             className="relative w-full max-w-2xl h-8 md:h-10 -my-1"
-          >
+            >
             <div className="absolute inset-0 flex items-center justify-center">
               {/* Main bright horizontal flare */}
               <div
@@ -66,8 +93,8 @@ export function HeroSection() {
                 className="absolute w-3 h-3 rounded-full"
                 style={{
                   background: 'radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 40%, transparent 70%)'
-                }}
-              /> */}
+                  }}
+                  /> */}
             </div>
           </motion.div>
 
@@ -76,12 +103,12 @@ export function HeroSection() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-            className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight leading-none relative z-10 text-center mt-1"
+            className="font-serif text-2xl sm:text-6xl md:text-4xl lg:text-4xl xl:text-6xl font-bold tracking-tight leading-none relative z-10 text-center mt-1"
             style={{
               color: "#f5f0e8",
               textShadow: `
-                0 0 40px rgba(245, 240, 232, 0.3),
-                0 0 80px rgba(245, 240, 232, 0.2),
+              0 0 40px rgba(245, 240, 232, 0.3),
+              0 0 80px rgba(245, 240, 232, 0.2),
                 0 2px 4px rgba(0, 0, 0, 0.5)
               `,
               filter: "drop-shadow(0 0 20px rgba(245, 240, 232, 0.15))",
@@ -89,9 +116,7 @@ export function HeroSection() {
           >
             ZEROGRAVITY
           </motion.h1>
-        </div>
-
-        {/* Subtitle - Animated */}
+          {/* Subtitle - Animated */}
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -100,7 +125,9 @@ export function HeroSection() {
         >
           Graphic Designer • Brand Identity • Visual Art
         </motion.p>
-
+        </div>
+            </div>
+            
         {/* Scroll indicator */}
         <motion.button
           onClick={scrollToWork}

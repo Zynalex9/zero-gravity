@@ -1,4 +1,5 @@
 'use client';
+import { forwardRef } from 'react';
 
 interface SectionProps {
   id: string;
@@ -7,21 +8,26 @@ interface SectionProps {
   fullHeight?: boolean;
 }
 
-export function Section({ id, children, className = '', fullHeight = true }: SectionProps) {
-  return (
-    <section
-      id={id}
-      className={`
-        relative w-full 
-        ${fullHeight ? 'min-h-screen' : ''} 
-        flex flex-col justify-center
-        ${className}
-      `}
-    >
-      {children}
-    </section>
-  );
-}
+export const Section = forwardRef<HTMLElement, SectionProps>(
+  ({ id, children, className = '', fullHeight = true }, ref) => {
+    return (
+      <section
+        ref={ref}
+        id={id}
+        className={`
+          relative w-full 
+          ${fullHeight ? 'min-h-screen' : ''} 
+          flex flex-col justify-center
+          ${className}
+        `}
+      >
+        {children}
+      </section>
+    );
+  }
+);
+
+Section.displayName = 'Section';
 
 interface ContentBoxProps {
   children: React.ReactNode;
