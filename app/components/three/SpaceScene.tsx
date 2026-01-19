@@ -4,8 +4,9 @@ import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react';
 import { Starfield } from './Starfield';
 import { SpaceObjects } from './SpaceObjects';
-// import { Astronaut } from './Astronaut';
+import { Astronaut } from './Astronaut';
 import { CameraController } from './CameraController';
+import { AstronautCameraController } from './AstronautCameraController'; // ⭐ New import
 
 interface SpaceSceneProps {
   scrollProgress: number;
@@ -35,46 +36,84 @@ export function SpaceScene({
       }}
       aria-hidden="true"
     >
+      {/* ============================================ */}
+      {/* FIRST CANVAS - Planets with Strong Zoom Effect */}
+      {/* ============================================ */}
       <Canvas
         camera={{ position: [0, 0, 20], fov: 75 }}
-        dpr={isMobile ? [1, 1.5] : [1, 2]} // Lower resolution on mobile
-        performance={{ min: 0.5 }} // Allow frame rate drops
+        dpr={isMobile ? [1, 1.5] : [1, 2]}
+        performance={{ min: 0.5 }}
         gl={{ 
-          antialias: !isMobile, // Disable antialiasing on mobile
+          antialias: !isMobile,
           powerPreference: 'high-performance',
           alpha: false,
         }}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+        }}
       >
-        {/* Fog for depth effect - adjusted for richer color */}
         <fog attach="fog" args={['#0a0e1a', 50, 180]} />
         
         <Suspense fallback={null}>
-          {/* Camera controller for scroll-driven zoom */}
+          {/* Planet camera controller - strong zoom effect */}
           <CameraController 
             scrollProgress={scrollProgress} 
             reducedMotion={reducedMotion} 
           />
           
-          {/* Starfield with scroll-driven density */}
           <Starfield 
             scrollProgress={scrollProgress} 
             reducedMotion={reducedMotion}
             isMobile={isMobile}
           />
           
-          {/* Space objects that appear at scroll thresholds */}
           <SpaceObjects 
             scrollProgress={scrollProgress} 
             reducedMotion={reducedMotion} 
           />
-          
-          {/* Floating astronaut */}
-          {/* <Astronaut 
-            mousePosition={mousePosition} 
-            reducedMotion={reducedMotion} 
-          /> */}
         </Suspense>
       </Canvas>
+
+      {/* ============================================ */}
+      {/* SECOND CANVAS - Astronaut with Custom Camera */}
+      {/* Subtle/different camera movement than planets */}
+      {/* ============================================ */}
+      <Canvas
+        camera={{ position: [0, 0, 20], fov: 75 }}
+        dpr={isMobile ? [1, 1.5] : [1, 2]}
+        performance={{ min: 0.5 }}
+        gl={{ 
+          antialias: !isMobile,
+          powerPreference: 'high-performance',
+          alpha: true, // Transparent background
+        }}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          pointerEvents: 'none',
+        }}
+      >
+        <Suspense fallback={null}>
+          {/* ⭐ ASTRONAUT CAMERA CONTROLLER - Different settings! */}
+          <AstronautCameraController 
+            scrollProgress={scrollProgress} 
+            reducedMotion={reducedMotion} 
+          />
+          
+          <Astronaut 
+            mousePosition={mousePosition} 
+            reducedMotion={reducedMotion} 
+          /> 
+        </Suspense>
+      </Canvas>
+
     </div>
   );
 }
